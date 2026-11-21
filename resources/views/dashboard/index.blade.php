@@ -10,22 +10,23 @@
     </div>
 
     @forelse($projects as $project)
-        <div class="card">
-            <h2>
-                <a href="{{ route('projects.show', $project) }}">{{ $project->judul }}</a>
-                <span class="badge {{ $project->status === 'terbuka' ? 'open' : 'closed' }}">{{ $project->status }}</span>
-            </h2>
-            <p class="muted">
-                Budget: Rp {{ number_format($project->budget_min, 0, ',', '.') }} - Rp {{ number_format($project->budget_max, 0, ',', '.') }} |
-                Batas: {{ $project->batas_lelang->format('Y-m-d') }} |
-                {{ $project->bids_count }} penawaran
-            </p>
-        </div>
-    @empty
-        <div class="card">
-            <p>Anda belum memasang proyek.</p>
-        </div>
-    @endforelse
+    <div class="card">
+        {{-- ... judul dan detail proyek yang sudah ada ... --}}
+
+        @if ($project->status === 'terbuka')
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <a href="{{ route('projects.edit', $project) }}" class="btn">Edit</a>
+                <form method="POST" action="{{ route('projects.destroy', $project) }}" onsubmit="return confirm('Yakin ingin menghapus proyek ini?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-secondary">Hapus</button>
+                </form>
+            </div>
+        @endif
+    </div>
+@empty
+    {{-- ... pesan jika proyek kosong ... --}}
+@endforelse
 @else
     <div class="card">
         <h1>Penawaran Saya</h1>
