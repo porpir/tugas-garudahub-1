@@ -28,6 +28,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/projects/{project}/bids', [BidController::class, 'store'])->name('bids.store');
     Route::post('/projects/{project}/bids/{bid}/pick', [BidController::class, 'pickWinner'])->name('bids.pick');
+    Route::get('/bids/{bid}/edit', [BidController::class, 'edit'])->name('bids.edit');
+    Route::put('/bids/{bid}', [BidController::class, 'update'])->name('bids.update');
+    Route::delete('/bids/{bid}', [BidController::class, 'destroy'])->name('bids.destroy');
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');

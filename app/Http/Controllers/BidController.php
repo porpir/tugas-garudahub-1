@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class BidController extends Controller
 {
@@ -44,6 +45,62 @@ class BidController extends Controller
         ]);
 
         return redirect()->route('projects.show', $project)->with('ok', 'Penawaran berhasil dikirim.');
+    }
+
+    public function edit(Bid $bid): View|RedirectResponse
+    {
+        $user = Auth::user();
+        abort_if($user?->role !== 'developer' || $bid->developer_id !== $user->id, 403, 'Anda tidak berhak mengedit penawaran ini.');
+
+        $bid->loadMissing('project');
+
+        if (!$bid->project->isOpen() || $bid->is_winner) {
+            return redirect()->route('dashboard')->with('err', 'Penawaran pada lelang yang sudah ditutup tidak dapat diedit.');
+        }
+
+        return view('bids.edit', compact('bid'));
+    }
+
+    public function update(Request $request, Bid $bid): RedirectResponse
+    {
+        $user = Auth::user();
+        abort_if($user?->role !== 'developer' || $bid->developer_id !== $user->id, 403, 'Anda tidak berhak memperbarui penawaran ini.');
+
+        $bid->loadMissing('project');
+
+        if (!$bid->project->isOpen() || $bid->is_winner) {
+            return redirect()->route('dashboard')->with('err', 'Penawaran pada lelang yang sudah ditutup tidak dapat diperbarui.');
+        }
+
+        $validated = $request->validate([
+            'harga' => ['required', 'integer', 'min:1', 'max:999999999999'],
+            'durasi' => ['required', 'integer', 'min:1', 'max:3650'],
+            'proposal' => ['required', 'string', 'max:5000'],
+        ]);
+
+        $bid->update([
+            'harga' => $validated['harga'],
+            'durasi' => $validated['durasi'],
+            'proposal' => trim($validated['proposal']),
+        ]);
+
+        return redirect()->route('dashboard')->with('ok', 'Penawaran berhasil diperbarui.');
+    }
+
+    public function destroy(Bid $bid): RedirectResponse
+    {
+        $user = Auth::user();
+        abort_if($user?->role !== 'developer' || $bid->developer_id !== $user->id, 403, 'Anda tidak berhak menghapus penawaran ini.');
+
+        $bid->loadMissing('project');
+
+        if (!$bid->project->isOpen() || $bid->is_winner) {
+            return redirect()->route('dashboard')->with('err', 'Penawaran pada lelang yang sudah ditutup tidak dapat dihapus.');
+        }
+
+        $bid->delete();
+
+        return redirect()->route('dashboard')->with('ok', 'Penawaran berhasil dibatalkan dan dihapus.');
     }
 
     public function pickWinner(Project $project, Bid $bid): RedirectResponse

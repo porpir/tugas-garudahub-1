@@ -11,8 +11,8 @@
         <div class="card">
             <h3>
                 <a href="{{ route('projects.show', $project) }}">{{ $project->judul }}</a>
-                <span class="badge {{ $project->status === 'terbuka' ? 'badge-open' : 'badge-closed' }}">
-                    {{ $project->status }}
+                <span class="badge {{ $project->isOpen() ? 'open' : 'closed' }}">
+                    {{ $project->isOpen() ? 'terbuka' : 'ditutup' }}
                 </span>
             </h3>
             <p class="muted">
@@ -22,7 +22,7 @@
                 Batas: {{ $project->batas_lelang->format('Y-m-d') }}
             </p>
 
-            @if ($project->status === 'terbuka')
+            @if ($project->isOpen())
                 <div style="display: flex; gap: 8px; margin-top: 10px;">
                     <a href="{{ route('projects.edit', $project) }}" class="btn">Edit</a>
                     <form method="POST" action="{{ route('projects.destroy', $project) }}" onsubmit="return confirm('Yakin ingin menghapus proyek ini?');">
@@ -47,11 +47,15 @@
         <div class="card">
             <h3>
                 <a href="{{ route('projects.show', $bid->project) }}">{{ $bid->project->judul }}</a>
-                <span class="badge {{ $bid->project->status === 'terbuka' ? 'badge-open' : 'badge-closed' }}">
-                    {{ $bid->project->status }}
+                <span class="badge {{ $bid->project->isOpen() ? 'open' : 'closed' }}">
+                    {{ $bid->project->isOpen() ? 'terbuka' : 'ditutup' }}
                 </span>
                 @if ($bid->is_winner)
-                    <span class="badge badge-open">Pemenang</span>
+                    <span class="badge open">Menang</span>
+                @elseif (!$bid->project->isOpen())
+                    <span class="badge closed">Kalah</span>
+                @else
+                    <span class="badge" style="background: #fef3c7; color: #92400e;">Menunggu</span>
                 @endif
             </h3>
             <p class="muted">
@@ -60,6 +64,17 @@
                 Durasi: {{ $bid->durasi }} hari |
                 Batas: {{ $bid->project->batas_lelang->format('Y-m-d') }}
             </p>
+
+            @if ($bid->project->isOpen() && !$bid->is_winner)
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    <a href="{{ route('bids.edit', $bid) }}" class="btn">Edit</a>
+                    <form method="POST" action="{{ route('bids.destroy', $bid) }}" onsubmit="return confirm('Yakin ingin membatalkan dan menghapus penawaran ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-secondary">Hapus</button>
+                    </form>
+                </div>
+            @endif
         </div>
     @empty
         <div class="card">

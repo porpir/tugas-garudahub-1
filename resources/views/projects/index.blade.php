@@ -18,7 +18,7 @@
     <div class="card">
         <h2>
             <a href="{{ route('projects.show', $project) }}">{{ $project->judul }}</a>
-            <span class="badge {{ $project->status === 'terbuka' ? 'open' : 'closed' }}">{{ $project->status }}</span>
+            <span class="badge {{ $project->isOpen() ? 'open' : 'closed' }}">{{ $project->isOpen() ? 'terbuka' : 'ditutup' }}</span>
         </h2>
         <p class="muted">
             Kategori: {{ $project->kategori }} |
