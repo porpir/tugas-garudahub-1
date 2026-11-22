@@ -4,9 +4,9 @@ Aplikasi lelang proyek IT berbasis web yang telah di-refactor dari PHP Native (*
 
 ## Fitur Utama
 - **Autentikasi & Multi-Role**: Registrasi dan login untuk peran `klien`, `developer`, dan `admin` menggunakan hashing password bawaan Laravel.
-- **Manajemen Proyek (Full CRUD)**: Klien dapat membuat, melihat, mengedit, dan menghapus proyek lelang selama status lelang masih `terbuka`.
-- **Sistem Penawaran (Bidding)**: Developer dapat mengajukan penawaran harga, durasi pengerjaan, dan proposal pada proyek yang masih terbuka.
-- **Pemilihan Pemenang**: Klien pemilik proyek dapat memilih satu penawaran pemenang yang otomatis menutup status lelang proyek.
+- **Manajemen Proyek (Full CRUD)**: Klien dapat membuat, melihat, mengedit, dan menghapus proyek lelang selama lelang masih terbuka (`isOpen()`).
+- **Sistem Penawaran (Full CRUD)**: Developer dapat mengajukan, melihat, mengedit, dan menghapus penawaran harga, durasi pengerjaan, dan proposal selama lelang masih terbuka.
+- **Pemilihan Pemenang**: Klien pemilik proyek dapat memilih satu penawaran pemenang yang otomatis menutup status lelang proyek dan memperbarui status penawaran (`Menang`, `Kalah`, `Menunggu`).
 - **Dasbor & Panel Admin**: Dasbor khusus sesuai peran pengguna serta panel admin untuk mengelola peran/akun pengguna dan menghapus proyek.
 
 ## Arsitektur & Relasi Database (ERD)
