@@ -14,7 +14,7 @@
         Budget: Rp {{ number_format($project->budget_min, 0, ',', '.') }} - Rp {{ number_format($project->budget_max, 0, ',', '.') }} |
         Batas lelang: {{ $project->batas_lelang->format('Y-m-d') }}
     </p>
-    <p style="white-space: pre-line;">{{ $project->deskripsi }}</p>
+    <p class="pre-line">{{ $project->deskripsi }}</p>
 </div>
 
 <div class="card">
@@ -40,10 +40,10 @@
                     </td>
                     <td>Rp {{ number_format($bid->harga, 0, ',', '.') }}</td>
                     <td>{{ $bid->durasi }} hari</td>
-                    <td style="white-space: pre-line;">{{ $bid->proposal }}</td>
+                    <td class="pre-line">{{ $bid->proposal }}</td>
                     <td>
                         @if(auth()->check() && auth()->user()->role === 'klien' && auth()->id() === $project->client_id && $project->status === 'terbuka')
-                            <form method="post" action="{{ route('bids.pick', [$project, $bid]) }}" onsubmit="return confirm('Pilih penawaran ini sebagai pemenang?')">
+                            <form method="post" action="{{ route('bids.pick', [$project, $bid]) }}" data-confirm="Pilih penawaran ini sebagai pemenang?">
                                 @csrf
                                 <button class="sm" type="submit">Pilih pemenang</button>
                             </form>

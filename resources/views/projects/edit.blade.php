@@ -6,7 +6,7 @@
 
     @if ($errors->any())
         <div class="alert alert-err">
-            <ul style="margin: 0; padding-left: 18px;">
+            <ul class="err-list">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -48,7 +48,7 @@
             <input type="date" id="batas_lelang" name="batas_lelang" value="{{ old('batas_lelang', $project->batas_lelang->format('Y-m-d')) }}" required>
         </div>
 
-        <div style="display: flex; gap: 8px; margin-top: 12px;">
+        <div class="action-row-lg">
             <button type="submit" class="btn">Simpan Perubahan</button>
             <a href="{{ route('dashboard') }}" class="btn btn-secondary">Batal</a>
         </div>

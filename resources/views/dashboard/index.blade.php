@@ -23,9 +23,9 @@
             </p>
 
             @if ($project->isOpen())
-                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <div class="action-row">
                     <a href="{{ route('projects.edit', $project) }}" class="btn">Edit</a>
-                    <form method="POST" action="{{ route('projects.destroy', $project) }}" onsubmit="return confirm('Yakin ingin menghapus proyek ini?');">
+                    <form method="POST" action="{{ route('projects.destroy', $project) }}" data-confirm="Yakin ingin menghapus proyek ini?">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-secondary">Hapus</button>
@@ -55,7 +55,7 @@
                 @elseif (!$bid->project->isOpen())
                     <span class="badge closed">Kalah</span>
                 @else
-                    <span class="badge" style="background: #fef3c7; color: #92400e;">Menunggu</span>
+                    <span class="badge wait">Menunggu</span>
                 @endif
             </h3>
             <p class="muted">
@@ -66,9 +66,9 @@
             </p>
 
             @if ($bid->project->isOpen() && !$bid->is_winner)
-                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <div class="action-row">
                     <a href="{{ route('bids.edit', $bid) }}" class="btn">Edit</a>
-                    <form method="POST" action="{{ route('bids.destroy', $bid) }}" onsubmit="return confirm('Yakin ingin membatalkan dan menghapus penawaran ini?');">
+                    <form method="POST" action="{{ route('bids.destroy', $bid) }}" data-confirm="Yakin ingin membatalkan dan menghapus penawaran ini?">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-secondary">Hapus</button>
