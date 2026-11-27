@@ -1,5 +1,8 @@
 <?php
 
+// NIM: 252410102097 - Parisya Radita Dewantara
+// Keamanan Otentikasi: Password Hashing (Bcrypt), Session Regeneration, & CSRF Protection
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
